@@ -1,8 +1,7 @@
-# todoapp/forms.py
 from django import forms
-from .models import TodoItem
+from .models import Task
 
 class TodoForm(forms.ModelForm):
     class Meta:
-        model = TodoItem
-        fields = ['title', 'description', 'done']
+        model = Task
+        fields = ['name', 'priority', 'date']

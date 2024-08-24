@@ -1,11 +1,17 @@
 <!-- todoapp/templates/todoapp/todo_confirm_delete.html -->
-<h1>Delete Todo</h1>
 
-<p>Are you sure you want to delete "{{ todo.title }}"?</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirm Delete</title>
+</head>
+<body>
+    <h1>Are you sure you want to delete "{{ todo.title }}"?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Confirm</button>
+    </form>
+    <a href="{% url 'todo_list' %}">Cancel</a>
+</body>
+</html>
 
-<form method="post">
-  {% csrf_token %}
-  <button type="submit">Confirm Delete</button>
-</form>
-
-<a href="{% url 'todo_list' %}">Cancel</a>

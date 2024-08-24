@@ -1,8 +1,17 @@
 <!-- todoapp/templates/todoapp/todo_form.html -->
-<h1>{% if form.instance.pk %}Update Todo{% else %}Create Todo{% endif %}</h1>
 
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Save</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create/Edit TODO</title>
+</head>
+<body>
+    <h1>Create/Edit TODO</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'todo_list' %}">Back to TODO List</a>
+</body>
+</html>

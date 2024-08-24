@@ -1,19 +1,25 @@
 <!-- todoapp/templates/todoapp/todo_list.html -->
-<h1>Todo List</h1>
 
-<ul>
-  {% for todo in todos %}
-    <li>
-      {{ todo.title }}
-      {% if not todo.done %}
-        <a href="{% url 'todo_update' todo.pk %}">Update</a>
-        <a href="{% url 'todo_delete' todo.pk %}">Delete</a>
-        <a href="{% url 'todo_done' todo.pk %}">Mark as Done</a>
-      {% else %}
-        (Done)
-      {% endif %}
-    </li>
-  {% endfor %}
-</ul>
-
-<a href="{% url 'todo_create' %}">Add New Todo</a>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TODO List</title>
+</head>
+<body>
+    <h1>TODO List</h1>
+    <a href="{% url 'todo_create' %}">Create New TODO</a>
+    <ul>
+        {% for todo in todos %}
+            <li>
+                {{ todo.title }} - {% if todo.done %} Done {% else %} Not Done {% endif %}
+                <a href="{% url 'todo_update' todo.pk %}">Edit</a>
+                <a href="{% url 'todo_delete' todo.pk %}">Delete</a>
+                {% if not todo.done %}
+                    <a href="{% url 'todo_done' todo.pk %}">Mark as Done</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'task_list' %}">View Tasks</a>
+</body>
+</html>

@@ -1,52 +1,68 @@
-# todoapp/views.py
-from django.shortcuts import render,get_object_or_404, redirect
-from .models import Tasks
-from .models import TodoItem
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+
 from .forms import TodoForm
+from . models import Task
+from django.views.generic import ListView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import UpdateView, DeleteView
+
+class TaskListview(ListView):
+    model=Task
+    template_name='home.html'
+    context_object_name = 'task1'
+
+class TaskDetailview(DetailView):
+    model = Task
+    template_name = 'detail.html'
+    context_object_name = 'task'
+
+class TaskUpdateview(UpdateView):
+    model = Task
+    template_name = 'update.html'
+    context_object_name = 'task'
+    fields = ['name', 'priority', 'date']
+
+    def get_success_url(self):
+        return reverse_lazy('cbvdetail',kwargs={'pk': self.object.pk})
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    template_name = 'delete.html'
+    success_url = reverse_lazy('cbvhome')
 
 
 
 
-def todo_list(request):
-    todos = TodoItem.objects.all()
-    return render(request, 'todoapp/todo_list.html', {'todos': todos})
 
-def todo_create(request):
+# Create your views here.
+def add(request):
+    task1 = Task.objects.all()
     if request.method == 'POST':
-        form = TodoForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('todo_list')
-    else:
-        form = TodoForm()
-    return render(request, 'todoapp/todo_form.html', {'form': form})
+        name = request.POST.get('task', '')
+        priority = request.POST.get('priority', '')
+        date=request.POST.get('date','')
+        task = Task(name=name,priority=priority,date=date)
+        task.save()
 
-def todo_update(request, pk):
-    todo = get_object_or_404(TodoItem, pk=pk)
+    return render(request,'home.html', {'task1': task1})
+#def details(request):
+
+   # return render(request,'detail.html',{'task': task})
+
+def delete(request,taskid):
+    task=Task.objects.get(id=taskid)
     if request.method == 'POST':
-        form = TodoForm(request.POST, instance=todo)
-        if form.is_valid():
-            form.save()
-            return redirect('todo_list')
-    else:
-        form = TodoForm(instance=todo)
-    return render(request, 'todoapp/todo_form.html', {'form': form})
+        task.delete()
+        return redirect('/')
+    return render(request,'delete.html')
 
-def todo_delete(request, pk):
-    todo = get_object_or_404(TodoItem, pk=pk)
-    if request.method == 'POST':
-        todo.delete()
-        return redirect('todo_list')
-    return render(request, 'todoapp/todo_confirm_delete.html', {'todo': todo})
+def update(request,id):
+    task=Task.objects.get(id=id)
+    f=TodoForm(request.POST or None, instance=task)
+    if f.is_valid():
+        f.save()
+        return redirect('/')
 
-def todo_done(request, pk):
-    todo = get_object_or_404(TodoItem, pk=pk)
-    todo.done = True
-    todo.save()
-    return redirect('todo_list')
-
-def task_list(request):
-    tasks = Tasks.objects.all()
-    return render(request, 'todoapp/task_list.html', {'tasks': tasks})
-
+    return render(request,'edit.html',{'f':f,'task':task})
 

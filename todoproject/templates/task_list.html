@@ -1,0 +1,17 @@
+<!-- todoapp/templates/todoapp/task_list.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task List</title>
+</head>
+<body>
+    <h1>Task List</h1>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.title }} - {% if task.done %} Done {% else %} Not Done {% endif %}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'todo_list' %}">Back to TODO List</a>
+</body>
+</html>

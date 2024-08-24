@@ -1,14 +1,12 @@
-# todoapp/models.py
 from django.db import models
 
-class Tasks(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
-    done = models.BooleanField(default=False)
+
+# Create your models here.
+class Task(models.Model):
+    name = models.CharField(max_length=250)
+    priority = models.IntegerField()
+    date=models.DateField()
 
     def __str__(self):
-        return self.title
+        return self.name
 
-
-class TodoItem:
-    pass
